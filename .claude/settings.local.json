@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__firecrawl__firecrawl_search",
+      "Bash(git config:*)",
+      "mcp__firecrawl__firecrawl_scrape",
+      "Bash(npm --version)",
+      "Bash(npx --version)",
+      "Bash(pnpm --version)",
+      "Bash(bun --version)",
+      "Bash(deno --version)",
+      "Bash(npm list:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "WebFetch(domain:twitterapi.io)",
+      "WebFetch(domain:docs.twitterapi.io)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vite:*)"
+    ]
+  }
+}
