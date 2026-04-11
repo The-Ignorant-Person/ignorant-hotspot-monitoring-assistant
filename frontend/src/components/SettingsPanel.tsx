@@ -29,7 +29,7 @@ export default function SettingsPanel({ settings, onUpdate }: Props) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="station-panel px-4 py-2 text-sm font-mono text-text-secondary hover:text-signal-cyan hover:border-signal-cyan/30 transition-colors cursor-pointer w-full text-left"
+        className="glass-panel w-full cursor-pointer px-5 py-3 text-left font-mono text-xs tracking-wider text-slate-400 transition-all hover:border-cyan-400/30 hover:text-cyan-300"
       >
         ⚙ 系统设置 · SETTINGS
       </button>
@@ -40,73 +40,84 @@ export default function SettingsPanel({ settings, onUpdate }: Props) {
   const browserNotification = local.notification_browser !== 'false';
 
   return (
-    <div className="station-panel p-4 animate-fade-in-up">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="led-dot led-cyan" />
-          <h2 className="text-sm font-mono text-signal-cyan tracking-wider m-0">
-            系统设置 · SETTINGS
-          </h2>
+    <div className="glass-panel-strong animate-fade-in-up p-5">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <span className="led-dot led-cyan animate-pulse-glow" />
+          <h2 className="section-title m-0 text-cyan-300">系统设置 · SETTINGS</h2>
         </div>
         <button
           onClick={() => setOpen(false)}
-          className="text-xs font-mono text-text-dim hover:text-text-secondary bg-transparent border-none cursor-pointer"
+          className="cursor-pointer border-none bg-transparent font-mono text-[10px] text-slate-500 hover:text-slate-300"
         >
           收起
         </button>
       </div>
 
-      {/* Notification Settings */}
+      {/* Notifications */}
       <div className="mb-4">
-        <h3 className="text-xs font-mono text-text-dim mb-2 m-0 tracking-wider">通知方式</h3>
+        <h3 className="m-0 mb-2 font-mono text-[10px] tracking-[0.16em] text-slate-500">
+          通知方式
+        </h3>
         <div className="space-y-2">
           <ToggleRow
             label="浏览器通知"
             enabled={browserNotification}
-            onChange={() => setLocal({ ...local, notification_browser: browserNotification ? 'false' : 'true' })}
+            onChange={() =>
+              setLocal({
+                ...local,
+                notification_browser: browserNotification ? 'false' : 'true',
+              })
+            }
           />
           <ToggleRow
             label="邮件通知"
             enabled={emailEnabled}
-            onChange={() => setLocal({ ...local, email_enabled: emailEnabled ? 'false' : 'true' })}
+            onChange={() =>
+              setLocal({ ...local, email_enabled: emailEnabled ? 'false' : 'true' })
+            }
           />
           {emailEnabled && (
             <input
               type="email"
               value={local.email_to || ''}
               onChange={(e) => setLocal({ ...local, email_to: e.target.value })}
-              placeholder="接收通知的邮箱地址..."
-              className="w-full bg-station-bg border border-station-border rounded px-3 py-2 text-sm font-mono text-text-primary placeholder:text-text-dim focus:outline-none focus:border-signal-cyan/50 transition-colors mt-1"
+              placeholder="接收通知的邮箱地址…"
+              className="mt-1 w-full rounded-lg border border-white/[0.08] bg-slate-950/60 px-3 py-2 font-mono text-xs text-slate-100 placeholder:text-slate-600 focus:border-cyan-400/40 focus:outline-none"
             />
           )}
         </div>
       </div>
 
-      {/* Scan Interval */}
+      {/* Scan interval */}
       <div className="mb-4">
-        <h3 className="text-xs font-mono text-text-dim mb-2 m-0 tracking-wider">扫描频率</h3>
+        <h3 className="m-0 mb-2 font-mono text-[10px] tracking-[0.16em] text-slate-500">
+          扫描频率
+        </h3>
         <div className="flex items-center gap-3">
-          <span className="text-sm font-mono text-text-secondary">每</span>
+          <span className="font-mono text-xs text-slate-400">每</span>
           <select
             value={local.scan_interval || '30'}
             onChange={(e) => setLocal({ ...local, scan_interval: e.target.value })}
-            className="bg-station-bg border border-station-border rounded px-3 py-1.5 text-sm font-mono text-text-primary focus:outline-none focus:border-signal-cyan/50"
+            className="rounded-lg border border-white/[0.08] bg-slate-950/60 px-3 py-1.5 font-mono text-xs text-slate-100 focus:border-cyan-400/40 focus:outline-none"
           >
             <option value="15">15</option>
             <option value="30">30</option>
             <option value="60">60</option>
           </select>
-          <span className="text-sm font-mono text-text-secondary">分钟扫描一次</span>
+          <span className="font-mono text-xs text-slate-400">分钟扫描一次</span>
         </div>
       </div>
 
-      {/* AI Model */}
+      {/* AI model */}
       <div className="mb-4">
-        <h3 className="text-xs font-mono text-text-dim mb-2 m-0 tracking-wider">AI 模型</h3>
+        <h3 className="m-0 mb-2 font-mono text-[10px] tracking-[0.16em] text-slate-500">
+          AI 模型
+        </h3>
         <select
           value={local.ai_model || 'deepseek/deepseek-chat-v3.1'}
           onChange={(e) => setLocal({ ...local, ai_model: e.target.value })}
-          className="w-full bg-station-bg border border-station-border rounded px-3 py-1.5 text-sm font-mono text-text-primary focus:outline-none focus:border-signal-cyan/50"
+          className="w-full rounded-lg border border-white/[0.08] bg-slate-950/60 px-3 py-2 font-mono text-xs text-slate-100 focus:border-cyan-400/40 focus:outline-none"
         >
           <option value="deepseek/deepseek-chat-v3.1">DeepSeek V3.1 (超便宜)</option>
           <option value="deepseek/deepseek-chat">DeepSeek V3</option>
@@ -116,13 +127,12 @@ export default function SettingsPanel({ settings, onUpdate }: Props) {
         </select>
       </div>
 
-      {/* Save Button */}
       <button
         onClick={handleSave}
         disabled={saving}
-        className="w-full py-2 bg-signal-green/10 border border-signal-green/30 rounded text-signal-green text-sm font-mono hover:bg-signal-green/20 transition-colors cursor-pointer disabled:opacity-50"
+        className="w-full rounded-lg border border-emerald-400/30 bg-emerald-400/10 py-2.5 font-mono text-xs tracking-wider text-emerald-300 transition-all hover:border-emerald-400/60 hover:bg-emerald-400/20 active:scale-[0.98] disabled:opacity-50"
       >
-        {saving ? '保存中...' : '保存设置'}
+        {saving ? '保存中…' : '保存设置'}
       </button>
     </div>
   );
@@ -132,31 +142,25 @@ function ToggleRow({
   label,
   enabled,
   onChange,
-  disabled,
-  hint,
 }: {
   label: string;
   enabled: boolean;
   onChange: () => void;
-  disabled?: boolean;
-  hint?: string;
 }) {
   return (
     <div className="flex items-center justify-between">
-      <span className={`text-sm font-mono ${disabled ? 'text-text-dim' : 'text-text-secondary'}`}>
-        {label}
-        {hint && <span className="text-xs text-signal-amber ml-2">({hint})</span>}
-      </span>
+      <span className="font-mono text-xs text-slate-300">{label}</span>
       <button
         onClick={onChange}
-        disabled={disabled}
-        className={`relative w-10 h-5 rounded-full transition-colors cursor-pointer border-none ${
-          enabled ? 'bg-signal-green/30' : 'bg-station-border'
-        } ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`}
+        className={`relative h-5 w-10 cursor-pointer rounded-full border-none transition-colors ${
+          enabled ? 'bg-emerald-400/30' : 'bg-white/[0.06]'
+        }`}
       >
         <div
-          className={`absolute top-0.5 w-4 h-4 rounded-full transition-all ${
-            enabled ? 'left-5 bg-signal-green shadow-[0_0_6px_#00ff88]' : 'left-0.5 bg-text-dim'
+          className={`absolute top-0.5 h-4 w-4 rounded-full transition-all ${
+            enabled
+              ? 'left-5 bg-emerald-400 shadow-[0_0_8px_#10b981]'
+              : 'left-0.5 bg-slate-500'
           }`}
         />
       </button>

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Spotlight } from './ui/spotlight';
+import { AnimatedNumber } from './ui/animated-number';
 
 interface Props {
   totalHotspots: number;
@@ -15,53 +17,52 @@ export default function RadarHeader({ totalHotspots, activeKeywords, connected }
   }, []);
 
   return (
-    <header className="station-panel border-b border-station-border px-6 py-4">
-      <div className="flex items-center justify-between">
-        {/* Left: Logo + Radar */}
+    <header className="relative overflow-hidden border-b border-white/[0.06] bg-slate-950/40 backdrop-blur-md">
+      <Spotlight />
+      <div className="relative z-10 mx-auto flex w-full max-w-[1480px] items-center justify-between px-6 py-5">
+        {/* Brand + radar */}
         <div className="flex items-center gap-4">
-          <div className="relative w-14 h-14 flex-shrink-0">
-            <div className="absolute inset-0 rounded-full border-2 border-signal-green/30" />
-            <div className="absolute inset-2 rounded-full border border-signal-green/20" />
-            <div className="absolute inset-4 rounded-full border border-signal-green/10" />
-            <div className="absolute inset-0 animate-radar origin-center">
+          <div className="relative h-14 w-14 flex-shrink-0">
+            <div className="absolute inset-0 rounded-full border border-cyan-400/40" />
+            <div className="absolute inset-2 rounded-full border border-cyan-400/25" />
+            <div className="absolute inset-4 rounded-full border border-cyan-400/15" />
+            <div className="absolute inset-0 origin-center animate-radar">
               <div
-                className="absolute top-1/2 left-1/2 w-1/2 h-0.5 origin-left"
-                style={{ background: 'linear-gradient(90deg, #00ff88, transparent)' }}
+                className="absolute left-1/2 top-1/2 h-0.5 w-1/2 origin-left"
+                style={{ background: 'linear-gradient(90deg, #22d3ee, transparent)' }}
               />
             </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-signal-green led-green" />
-            <div className="absolute top-3 right-4 w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse-glow" />
-            <div className="absolute bottom-4 right-3 w-1 h-1 rounded-full bg-signal-amber animate-pulse-glow" style={{ animationDelay: '0.7s' }} />
+            <div className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-300 shadow-[0_0_12px_#22d3ee]" />
           </div>
 
           <div>
-            <h1 className="text-xl font-bold font-mono text-signal-green text-glow-green tracking-wider m-0">
-              SIGNAL STATION
+            <h1 className="m-0 font-mono text-xl font-bold tracking-[0.18em] text-gradient-tech">
+              SIGNAL · STATION
             </h1>
-            <p className="text-xs text-text-secondary font-mono tracking-widest m-0">
-              热点信号监控中心
+            <p className="m-0 mt-0.5 font-mono text-[10px] tracking-[0.32em] text-slate-500">
+              热点信号监控中心 · INTELLIGENCE FEED
             </p>
           </div>
         </div>
 
-        {/* Center: LED Stats */}
-        <div className="flex gap-6">
-          <LedCounter label="拦截信号" value={totalHotspots} color="green" />
-          <LedCounter label="监听频率" value={activeKeywords} color="cyan" />
-          <LedCounter label="信号源" value={3} color="amber" />
+        {/* LED Stats */}
+        <div className="hidden gap-8 md:flex">
+          <LedCounter label="拦截信号" subLabel="SIGNALS" value={totalHotspots} color="cyan" />
+          <LedCounter label="监听频率" subLabel="FREQ" value={activeKeywords} color="violet" />
+          <LedCounter label="信号源" subLabel="SOURCE" value={3} color="emerald" />
         </div>
 
-        {/* Right: System Clock */}
+        {/* Clock */}
         <div className="text-right font-mono">
-          <div className="text-signal-green text-sm text-glow-green">
+          <div className="text-glow-cyan text-base text-cyan-300 tabular-nums">
             {time.toLocaleTimeString('zh-CN', { hour12: false })}
           </div>
-          <div className="text-text-dim text-xs">
+          <div className="text-[10px] tracking-wider text-slate-500">
             {time.toLocaleDateString('zh-CN')}
           </div>
-          <div className="flex items-center gap-1.5 justify-end mt-1">
-            <span className={`led-dot ${connected ? 'led-green animate-pulse-glow' : 'led-red'}`} />
-            <span className={`text-xs ${connected ? 'text-signal-green' : 'text-signal-red'}`}>
+          <div className="mt-1 flex items-center justify-end gap-1.5">
+            <span className={`led-dot ${connected ? 'led-emerald animate-pulse-glow' : 'led-rose'}`} />
+            <span className={`text-[10px] tracking-wider ${connected ? 'text-emerald-400' : 'text-rose-400'}`}>
               {connected ? 'ONLINE' : 'OFFLINE'}
             </span>
           </div>
@@ -71,19 +72,31 @@ export default function RadarHeader({ totalHotspots, activeKeywords, connected }
   );
 }
 
-function LedCounter({ label, value, color }: { label: string; value: number; color: 'green' | 'cyan' | 'amber' }) {
+function LedCounter({
+  label,
+  subLabel,
+  value,
+  color,
+}: {
+  label: string;
+  subLabel: string;
+  value: number;
+  color: 'cyan' | 'violet' | 'emerald';
+}) {
   const colorMap = {
-    green: 'text-signal-green text-glow-green',
-    cyan: 'text-signal-cyan text-glow-cyan',
-    amber: 'text-signal-amber text-glow-amber',
+    cyan: 'text-cyan-300 text-glow-cyan',
+    violet: 'text-violet-300 text-glow-violet',
+    emerald: 'text-emerald-300 text-glow-emerald',
   };
 
   return (
     <div className="text-center">
-      <div className={`text-2xl font-mono font-bold ${colorMap[color]} tabular-nums`}>
-        {String(value).padStart(3, '0')}
+      <div className={`font-mono text-2xl font-bold tabular-nums ${colorMap[color]}`}>
+        <AnimatedNumber value={value} />
       </div>
-      <div className="text-xs text-text-dim font-mono tracking-wider">{label}</div>
+      <div className="font-mono text-[9px] tracking-[0.2em] text-slate-500">
+        {subLabel} · {label}
+      </div>
     </div>
   );
 }

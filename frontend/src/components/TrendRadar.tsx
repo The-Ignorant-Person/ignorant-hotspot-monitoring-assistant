@@ -7,75 +7,61 @@ interface Props {
 
 function HeatBars({ level }: { level: number }) {
   return (
-    <div className="flex gap-0.5 items-end">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className="w-1.5 rounded-sm transition-all"
-          style={{
-            height: `${8 + i * 3}px`,
-            background:
-              i <= level
-                ? level >= 4
-                  ? '#00ff88'
-                  : level >= 3
-                    ? '#00d4ff'
-                    : '#ff8800'
-                : '#1e293b',
-            boxShadow:
-              i <= level
-                ? level >= 4
-                  ? '0 0 4px #00ff8866'
-                  : 'none'
-                : 'none',
-          }}
-        />
-      ))}
+    <div className="flex items-end gap-[3px]">
+      {[1, 2, 3, 4, 5].map((i) => {
+        const active = i <= level;
+        const color = level >= 4 ? '#10b981' : level >= 3 ? '#22d3ee' : '#f59e0b';
+        return (
+          <div
+            key={i}
+            className="w-1 rounded-sm transition-all"
+            style={{
+              height: `${6 + i * 3}px`,
+              background: active ? color : 'rgba(148,163,184,0.15)',
+              boxShadow: active ? `0 0 6px ${color}66` : 'none',
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
 
 export default function TrendRadar({ trends, loading }: Props) {
   return (
-    <div className="station-panel p-4">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="led-dot led-green" />
-        <h2 className="text-sm font-mono text-signal-green tracking-wider m-0">
-          趋势雷达 · TREND RADAR
-        </h2>
+    <div className="glass-panel-strong p-5">
+      <div className="mb-4 flex items-center gap-2.5">
+        <span className="led-dot led-emerald animate-pulse-glow" />
+        <h2 className="section-title m-0 text-emerald-300">趋势雷达 · TREND RADAR</h2>
       </div>
 
       {loading ? (
-        <div className="text-center text-text-dim font-mono text-sm py-4 animate-pulse-glow">
-          分析中...
+        <div className="py-6 text-center font-mono text-xs text-slate-500 animate-pulse">
+          AI 分析中…
         </div>
       ) : trends.length === 0 ? (
-        <div className="text-center text-text-dim font-mono text-sm py-4">
-          暂无趋势数据
-        </div>
+        <div className="py-6 text-center font-mono text-xs text-slate-600">暂无趋势数据</div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {trends.map((trend) => (
             <div
               key={trend.id}
-              className="bg-station-bg/50 border border-station-border rounded p-3 hover:border-signal-green/20 transition-all"
+              className="group rounded-lg border border-white/[0.06] bg-white/[0.02] p-3 transition-all hover:border-cyan-400/20 hover:bg-white/[0.04]"
             >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono px-2 py-0.5 rounded bg-signal-cyan/10 border border-signal-cyan/30 text-signal-cyan">
+              <div className="mb-1.5 flex items-start justify-between gap-2">
+                <div className="flex min-w-0 flex-col gap-1">
+                  <span className="self-start rounded border border-violet-400/30 bg-violet-400/10 px-1.5 py-0.5 font-mono text-[9px] tracking-wider text-violet-300">
                     {trend.category}
                   </span>
-                  <span className="text-sm font-medium text-text-primary">{trend.title}</span>
+                  <span className="text-[12px] font-medium leading-snug text-slate-200">
+                    {trend.title}
+                  </span>
                 </div>
                 <HeatBars level={trend.heat_level} />
               </div>
-              <p className="text-xs text-text-secondary m-0 mb-2">{trend.summary}</p>
-              <div className="flex items-center gap-1">
-                <span className="text-xs text-text-dim font-mono">来源:</span>
-                {trend.sources.map((s) => (
-                  <span key={s} className="text-xs text-text-dim font-mono">{s}</span>
-                ))}
-              </div>
+              <p className="m-0 line-clamp-2 text-[11px] leading-relaxed text-slate-500">
+                {trend.summary}
+              </p>
             </div>
           ))}
         </div>
